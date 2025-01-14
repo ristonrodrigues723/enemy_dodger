@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        * { margin: 0; }
+        #g { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 2px solid #333; }
+        #s { position: fixed; top: 10px; left: 10px; color: #fff; }
+    </style>
+</head>
+<body style="background:#000;">
+    <canvas id="g" width="300" height="400"></canvas>
+    <div id="s">0</div>
+    <script>
+        let c = document.getElementById`g`, x = c.getContext`2d`, h = document.getElementById`s`, p = {x: 150, y: 370}, o = [], S = 0, v = 2, L = _ => {
+            x.clearRect(0, 0, 300, 400);
+            x.fillStyle = "#0f0";
+            x.fillRect(p.x - 10, p.y, 20, 20);
+            x.fillStyle = "#f00";
+            o.forEach(e => x.fillRect(e.x, e.y, 30, 20));
+            o = o.filter(e => (e.y += v, e.y < 400 || (S++, h.textContent = S, v += .1, 0)));
+            Math.random() < .02 && o.push({x: Math.random() * 270, y: -20});
+            o.some(e => p.x < e.x + 30 && p.x + 20 > e.x && 370 < e.y + 20 && 390 > e.y) && (alert('Game Over: ' + S), o = [], S = 0, v = 2, h.textContent = 0);
+            requestAnimationFrame(L)
+        };
+        c.onmousemove = e => p.x = e.clientX - c.getBoundingClientRect().left;
+        c.ontouchmove = e => { e.preventDefault(); p.x = e.touches[0].clientX - c.getBoundingClientRect().left };
+        L()
+    </script>
+</body>
+</html>
